@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+layout:decorate="template1">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.3/css/bootstrap.min.css">
+</head>
+<body>
+
+<div layout:fragment="content1">
+<div class="container mt-2">
+    <title>List of patients</title>
+
+    <div class="card ">
+    <div class="card-header">List of patients</div>
+    <div class="card-body">
+        <form th:action="@{index}" method="get">
+            <label>Key word</label>
+            <input type="text" name="keyword" th:value="${keyword}">
+            <button class="btn btn-primary" type="submit">Chercher</button>
+        </form>
+        <table class="table table-striped shadow ">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nom </th>
+                <th>Date</th>
+                <th>Malade</th>
+                <th>Score</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="p:${listPatients}">
+                <td th:text="${p.getId()}"></td>
+                <td th:text="${p.getNom()}"></td>
+                <td th:text="${p.getDateNaissance()}"></td>
+                <td th:text="${p.isMalade()}"></td>
+                <td th:text="${p.getScore()}"></td>
+                <td>
+                    <a
+                       class="btn btn-primary" th:href="@{update(id=${p.getId()},page=${currentPage}
+                       , keyword=${keyword})}">
+                        Update</a>
+                </td>
+                <td>
+                    <a onclick="return confirm('Etes vous sure?')"
+                       class="btn btn-danger" th:href="@{delete(id=${p.getId()},
+                    keyword=${keyword},page=${currentPage})}">Delete</a>
+                </td>
+
+
+            </tr>
+            </tbody>
+        </table>
+        <ul class="nav nav-pills">
+            <li th:each="page,status:${pages}">
+                <a  th:text="${status.index}"
+                   th:class="${status.index==currentPage}?
+                   'btn btn-primary ms-1':'btn btn-primary-oultline-info ms-1'"
+                th:href="@{index(page=${status.index},keyword=${keyword})}"></a>
+            </li>
+        </ul>
+        <a class="btn btn-success mt-2">
+            <button  type="button" class="btn btn-success">Add New Patient</button>
+        </a>
+     </div>
+
+    </div>
+
+
+</div>
+</div>
+</body>
+</html>
